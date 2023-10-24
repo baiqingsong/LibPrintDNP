@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     public byte[] jpgChangeBmp(){
         // 二进制数据
         String inputPath = Environment.getExternalStorageDirectory() + "/demo.png"; // 保存路径
-        String outFilePath = Environment.getExternalStorageDirectory() + "/demo.bmp"; // 保存路径
+//        String outFilePath = Environment.getExternalStorageDirectory() + "/demo.bmp"; // 保存路径
         Bitmap jpgBitmap = BitmapFactory.decodeFile(inputPath);
         // 创建旋转矩阵
         Matrix matrix = new Matrix();
@@ -206,12 +206,12 @@ public class MainActivity extends AppCompatActivity {
         // 旋转图片
         Bitmap rotatedBitmap = Bitmap.createBitmap(jpgBitmap, 0, 0, jpgBitmap.getWidth(), jpgBitmap.getHeight(), matrix, true);
         jpgBitmap.recycle();
-        ImageConverter.saveBitmapAsBmp(rotatedBitmap, outFilePath);
-        Bitmap outBitmap = BitmapFactory.decodeFile(outFilePath);
+//        ImageConverter.saveBitmapAsBmp(rotatedBitmap, outFilePath);
+//        Bitmap outBitmap = BitmapFactory.decodeFile(outFilePath);
         //bitmap转换成byte[]
-        byte[] bmpBytes = ImageConverter.createBmpData(outBitmap);
+        byte[] bmpBytes = ImageConverter.createBmpData(rotatedBitmap);
         rotatedBitmap.recycle();
-        outBitmap.recycle();
+//        outBitmap.recycle();
         return bmpBytes;
     }
 
