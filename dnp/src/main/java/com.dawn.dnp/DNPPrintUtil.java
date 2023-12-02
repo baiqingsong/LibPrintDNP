@@ -1,76 +1,33 @@
-package com.dawn.libprintdnp;
+package com.dawn.dnp;
 
-import static jp.co.dnp.photoprintlib.DNPPhotoPrint.CUTTER_MODE_2INCHCUT;
 import static jp.co.dnp.photoprintlib.DNPPhotoPrint.CUTTER_MODE_STANDARD;
 import static jp.co.dnp.photoprintlib.DNPPhotoPrint.RESOLUTION300;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
-import com.dawn.dnp.DNPPrintFactory;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import jp.co.dnp.photoprintlib.DNPPhotoPrint;
 
-public class MainActivity extends AppCompatActivity {
-
-//    private DNPPhotoColorCnv mPrint;
+/**
+ * dnp 打印机工厂类
+ */
+class DNPPrintUtil {
     private DNPPhotoPrint mPrint;
     private int portNum = 1;
-    private DNPPrintFactory dnpPrintFactory;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        dnpPrintFactory = DNPPrintFactory.getInstance(this);
-    }
-
-    public void libInitPrint(View view){
-        dnpPrintFactory.initPrint();
-    }
-
-    public void libPrintImage(View view){
-        String inputPath = Environment.getExternalStorageDirectory() + "/demo.png"; // 保存路径
-//        String outFilePath = Environment.getExternalStorageDirectory() + "/demo.bmp"; // 保存路径
-        Bitmap jpgBitmap = BitmapFactory.decodeFile(inputPath);
-        dnpPrintFactory.printImage(jpgBitmap);
-        if(jpgBitmap != null){
-            jpgBitmap.recycle();
-        }
-    }
-
-    public void initPrint(View view){
-        mPrint = new DNPPhotoPrint(this);
-        if(mPrint != null){
-            getPortNum(view);
-            getFirmVersion(view);
-            getPQTY(view);
-            setResolution(view);
-            setMediaSize(view);
-            getFreeBuffer(view);
-            setPQTY(view);
-            setCutterMode(view);
-            setOvercoatFinish(view);
-            setRetryControl(view);
-        }
+    public DNPPrintUtil(Context context) {
+        this.mPrint = new DNPPhotoPrint(context);
     }
 
     /**
      * 获取打印机端口号
      */
-    public void getPortNum(View view){
+    public void getPortNum(){
 
         int[][] portAry = new int[4][2];
         if(mPrint != null){
@@ -81,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getFirmVersion(View view){
+    public void getFirmVersion(){
         if(mPrint != null){
             char[] rbuf = new char[256];
             int firmVersion = mPrint.GetFirmwVersion(0, rbuf);
@@ -92,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getPQTY(View view){
+    public void getPQTY(){
         if(mPrint != null){
             int num = mPrint.GetPQTY(0);//获取剩余打印图片
             Log.e("dawn", "getPQTY num = " + num);
@@ -102,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 设置分辨率
      */
-    public void setResolution(View view){
+    public void setResolution(){
         if(mPrint != null){
             boolean setResult = mPrint.SetResolution(0, RESOLUTION300);//300或者600dpi
             Log.e("dawn", "setResolution setResult = " + setResult);
@@ -136,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
      * 58 CSP_4P5x6
      * 59 CSP_4P5x8
      */
-    public void setMediaSize(View view){
+    public void setMediaSize(){
         if(mPrint != null){
             boolean setResult = mPrint.SetMediaSize(0, 8);
             Log.e("dawn", "setMediaSize setResult = " + setResult);
@@ -146,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 获取打印机上可用缓存大小
      */
-    public void getFreeBuffer(View view){
+    public void getFreeBuffer(){
         if(mPrint != null){
             int freeBuffer = mPrint.GetFreeBuffer(0);
             Log.e("dawn", "getFreeBuffer freeBuffer = " + freeBuffer);
@@ -156,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 设置打印数量
      */
-    public void setPQTY(View view){
+    public void setPQTY(){
         if(mPrint != null){
             boolean setResult = mPrint.SetPQTY(0, 1);
             Log.e("dawn", "setPQTY setResult = " + setResult);
@@ -169,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
      * CUTTER_MODE_NONSCRAP     (1) Non-scrap cutter operation
      * CUTTER_MODE_2INCHCUT  (120) 2inch-cut operation *1
      */
-    public void setCutterMode(View view){
+    public void setCutterMode(){
         if(mPrint != null){
             boolean setResult = mPrint.SetCutterMode(0, CUTTER_MODE_STANDARD);
             Log.e("dawn", "setCutterMode setResult = " + setResult);
@@ -194,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * OVERCOAT_FINISH_PMATTE13（122）部分哑光（光泽）*1，*3
      */
-    public void setOvercoatFinish(View view){
+    public void setOvercoatFinish(){
         if(mPrint != null){
             boolean setResult = mPrint.SetOvercoatFinish(0, 0);
             Log.e("dawn", "setOvercoatFinish setResult = " + setResult);
@@ -206,67 +163,88 @@ public class MainActivity extends AppCompatActivity {
      * PRINT_RETRY_OFF (0) Print retry [OFF]
      *   PRINT_RETRY_ON  (1) Print retry [ON]
      */
-    public void setRetryControl(View view){
+    public void setRetryControl(){
         if(mPrint != null){
             boolean setResult = mPrint.SetRetryControl(0, 0);
             Log.e("dawn", "setRetryControl setResult = " + setResult);
         }
     }
 
-    public byte[] jpgChangeBmp(){
-        // 二进制数据
-        String inputPath = Environment.getExternalStorageDirectory() + "/demo.png"; // 保存路径
-//        String outFilePath = Environment.getExternalStorageDirectory() + "/demo.bmp"; // 保存路径
-        Bitmap jpgBitmap = BitmapFactory.decodeFile(inputPath);
-        // 创建旋转矩阵
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        // 旋转图片
-        Bitmap rotatedBitmap = Bitmap.createBitmap(jpgBitmap, 0, 0, jpgBitmap.getWidth(), jpgBitmap.getHeight(), matrix, true);
-        jpgBitmap.recycle();
-//        ImageConverter.saveBitmapAsBmp(rotatedBitmap, outFilePath);
-//        Bitmap outBitmap = BitmapFactory.decodeFile(outFilePath);
-        //bitmap转换成byte[]
-        byte[] bmpBytes = ImageConverter.createBmpData(rotatedBitmap);
-        rotatedBitmap.recycle();
-//        outBitmap.recycle();
-        return bmpBytes;
+    public void sendImageData(String imagePath){
+        if(mPrint != null){
+            try{
+                Log.e("dawn", "jpg change bmp start");
+                byte[] bmpBytes = jpgChangeBmp(imagePath);
+                boolean setResult = mPrint.SendImageData(0, bmpBytes, 0, 0, 1844, 1240);
+                Log.e("dawn", "sendImageData setResult = " + setResult);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
      * 发送打印数据
-     * @param view
      */
-    public void sendImageData(View view){
-        if(mPrint != null){
-
-            new Thread(){
-                @Override
-                public void run() {
-                    super.run();
-                    try{
-                        //从assets中读取bmp图片并且转换成byte[]
-//                        InputStream is = getResources().getAssets().open("01_TEST_PC_300.bmp");
-//                        InputStream is = getResources().getAssets().open("testt2.bmp");
-//                        byte[] data = new byte[is.available()];
-//                        is.read(data);
-//                        is.close();
-                        Log.e("dawn", "jpg change bmp start");
-                        byte[] bmpBytes = jpgChangeBmp();
-                        Log.e("dawn", "jpg change bmp end");
-                        Log.e("dawn", "absolute path " + Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.bmp");
-//
-
-                        boolean setResult = mPrint.SendImageData(0, bmpBytes, 0, 0, 1844, 1240);
-                        Log.e("dawn", "sendImageData setResult = " + setResult);
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
+    public void sendImageData(final Bitmap bitmap){
+        if(mPrint != null && bitmap != null){
+            try{
+                Log.e("dawn", "jpg change bmp start");
+                byte[] bmpBytes = null;
+                if(bitmap.getWidth() < bitmap.getHeight()){
+                    bmpBytes = bitmapChangeByte(rotateBitmap(bitmap));
+                }else{
+                    bmpBytes = bitmapChangeByte(bitmap);
                 }
-            }.start();
+                boolean setResult = mPrint.SendImageData(0, bmpBytes, 0, 0, 1844, 1240);
+                Log.e("dawn", "sendImageData setResult = " + setResult);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
+    /**
+     * 图片转换成byte数组
+     * @return
+     */
+    public byte[] jpgChangeBmp(String inputPath){
+        // 二进制数据
+//        String inputPath = Environment.getExternalStorageDirectory() + "/demo.png"; // 保存路径
+        Bitmap jpgBitmap = BitmapFactory.decodeFile(inputPath);
+        Bitmap rotatedBitmap = rotateBitmap(jpgBitmap);
+        byte[] bmpBytes = bitmapChangeByte(rotatedBitmap);
+        rotatedBitmap.recycle();
+        return bmpBytes;
+    }
+
+    /**
+     * 旋转图片90°
+     * @return
+     */
+    Bitmap rotateBitmap(Bitmap bitmap){
+        if(bitmap == null)
+            return null;
+        // 创建旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        // 旋转图片
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        bitmap.recycle();
+        return rotatedBitmap;
+    }
+
+    /**
+     * bitmap转换成byte数组
+     * bitmap需要自己回收
+     * @return
+     */
+    public byte[] bitmapChangeByte(Bitmap bitmap){
+        if(bitmap == null)
+            return null;
+        byte[] bmpBytes = ImageConverter.createBmpData(bitmap);
+        return bmpBytes;
+    }
 }

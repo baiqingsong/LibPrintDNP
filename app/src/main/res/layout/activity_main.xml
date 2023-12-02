@@ -21,87 +21,23 @@
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="获取端口号"
-        android:onClick="getPortNum"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="获取固件版本号"
-        android:onClick="getFirmVersion"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="获取打印机数量"
-        android:onClick="getPQTY"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置分辨率"
-        android:onClick="setResolution"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置打印尺寸"
-        android:onClick="setMediaSize"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="获取打印缓存控件"
-        android:onClick="getFreeBuffer"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置打印数量"
-        android:onClick="setPQTY"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置切割模式"
-        android:onClick="setCutterMode"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置覆膜模式"
-        android:onClick="setOvercoatFinish"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="设置重试控制"
-        android:onClick="setRetryControl"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
         android:text="发送打印数据"
         android:onClick="sendImageData"/>
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="调用引用初始化"
+        android:onClick="libInitPrint"/>
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="引用打印照片"
+        android:onClick="libPrintImage"/>
 
 </LinearLayout>
